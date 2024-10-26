@@ -246,9 +246,17 @@ class ThrusterManager(Node):
         # If an output directory was provided, store matrix for further use
         if self.output_dir is not None:
             with open(join(self.output_dir, 'TAM.yaml'), 'w') as yaml_file:
-                yaml_file.write(
-                    yaml.safe_dump(
-                        dict(tam=self.configuration_matrix.tolist())))
+                yaml.dump(
+                    {
+                        '/**': {
+                            'ros__parameters': {
+                                'tam': self.configuration_matrix.reshape(-1).tolist()
+                            }
+                        }
+                    },
+                    yaml_file,
+                    default_flow_style=False,
+                )
 
         self._ready = True
         self.init_future.set_result(True)
@@ -399,9 +407,17 @@ class ThrusterManager(Node):
         # If an output directory was provided, store matrix for further use
         if self.output_dir is not None and not recalculate:
             with open(join(self.output_dir, 'TAM.yaml'), 'w') as yaml_file:
-                yaml_file.write(
-                    yaml.safe_dump(
-                        dict(tam=self.configuration_matrix.tolist())))
+                yaml.dump(
+                    {
+                        '/**': {
+                            'ros__parameters': {
+                                'tam': self.configuration_matrix.reshape(-1).tolist()
+                            }
+                        }
+                    },
+                    yaml_file,
+                    default_flow_style=False,
+                )
             self.get_logger().info('TAM saved in <{}>'.format(join(self.output_dir, 'TAM.yaml')))
         elif recalculate:
             self.get_logger().info('Recalculate flag on, matrix will not be stored in TAM.yaml')
