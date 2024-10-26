@@ -64,8 +64,8 @@ class ThrusterProportional(Thruster):
         
         `float`: Angular velocity set-point for the thruster in rad/s 
         """
-        return numpy.sign(thrust) * \
-            numpy.sqrt(numpy.abs(thrust) / self._gain)
+        return numpy.sign(thrust / self._gain) * \
+            numpy.sqrt(numpy.abs(thrust / self._gain))
 
     #==============================================================================
     def get_thrust_value(self, command):
